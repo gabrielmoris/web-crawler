@@ -1,10 +1,32 @@
 const fs = require("fs");
+const cheerio = require("cheerio");
+
 let dataForJson = {}; //escribir aqui la data final
 const pathToWrite = __dirname + `/data.json`;
 
 let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
-console.log(data);
 
+const getDataFromHTML = (html) => {
+    let results = [];
+    const $ = cheerio.load(html);
+    $("span.comhead").each(function () {
+        let a = $(this).prev();
+        let title = a.text();
+        let url = a.attr("href");
+
+        let obj = {
+            title: title,
+            url: url,
+        };
+        results.push(obj);
+    });
+    if (results.length > 0) {
+        console.log(results);
+        return results;
+    }
+};
+
+console.log(getDataFromHTML(data));
 
 //VERSION1
 // fs.writeFile(pathToWrite, dataForJson, (err) => {
