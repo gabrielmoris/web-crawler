@@ -1,0 +1,20 @@
+{
+        "uri": {
+                "protocol": "https:",
+                "slashes": true,
+                "auth": null,
+                "host": "apartamentosrd.com.do",
+                "port": 443,
+                "hostname": "apartamentosrd.com.do",
+                "hash": null,
+                "search": "?city=60&currency=RD&listing_type=1&page=1",
+                "query": "city=60&currency=RD&listing_type=1&page=1",
+                "pathname": "/propiedades",
+                "path": "/propiedades?city=60&currency=RD&listing_type=1&page=1",
+                "href": "https://apartamentosrd.com.do/propiedades?city=60&currency=RD&listing_type=1&page=1"
+        },
+        "method": "GET",
+        "headers": {
+                "host": "apartamentosrd.com.do"
+        }
+}
