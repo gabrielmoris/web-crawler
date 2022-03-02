@@ -8,20 +8,39 @@ const pathToWrite = __dirname + `/data.json`;
 let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
 
 const getDataFromHTML = (html) => {
-    let results = [];
+    let result = []
+    let arrayOfPrices = []
+    let arrOfNamesRaw =[]
+    let arrayOfNames =[]
     const $ = cheerio.load(html, null, false);
     $.html();
-    const propertyNames = $("h5", ".property-content")
-        .contents()
-        .map(function () {
-            return this.type === "text" ? $(this).text() : "";
-        })
-        .get()
-        .join("_");
-    const propertyLocations = $("span", ".sc-bBXqnf").text();
-    const propertyPrices = $("li", ".sc-fKFyDc").text();
+    const propertyNames = $("h5", ".property-content").each(function (i, e) {
+        arrOfNamesRaw[i] = $(this).text();
+    });
 
-    const arrayOfPropertyNames = propertyNames.split("_");
+    const propertyPrices = $(".sc-fKFyDc").each(function (i, e) {
+        arrayOfPrices[i] = $(this).text()
+    });
+    
+    const propertyLocations = $("span", ".sc-bBXqnf").text();
+    const cleanPropertyLocations = propertyLocations.replace(/\s+/g, ' ').trim()
+
+    const arrayOfLocations = cleanPropertyLocations.split(",")
+
+    for(let i = 0; i< arrOfNamesRaw.length;i++){
+        arrayOfNames.push(arrOfNamesRaw[i].replace(/\s+/g, ' '))
+    }
+
+    for(j =0; j<arrOfNamesRaw.length;j++){
+          const obj ={
+              property: arrayOfNames[j],
+              location: arrayOfLocations[j],
+              price: arrayOfPrices[j]
+          }
+          result.push(obj)
+    }
+
+    return result
 };
 
 console.log(getDataFromHTML(data));
