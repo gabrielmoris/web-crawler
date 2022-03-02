@@ -1,11 +1,10 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
-var request = require("request");
+const request = require("request");
+const pathToWrite = __dirname + `/propertiesWeb.json`;
+const pathToWriteHTML = __dirname + `/dataWeb.html`;
 
-const pathToWrite = __dirname + `/properties.json`;
-// const pathToWrite = __dirname + `/datamook.json`;
-
-let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
+let data = fs.readFileSync(`${__dirname}/dataWeb.html`, "utf8");
 
 const getDataFromHTML = (html) => {
     let result = [];
@@ -45,32 +44,27 @@ const getDataFromHTML = (html) => {
     return result;
 };
 
-// let dataForJson = fetch(
-//     {
-//         method: "GET",
-//         url: "https://apartamentosrd.com.do/propiedades?city=60&currency=RD&listing_type=1&page=1",
-//     },
-//     (err, res, body) => {
-//         if (err) return console.error(err);
+const url =
+    "https://apartamentosrd.com.do/propiedades?city=60&currency=RD&listing_type=1&page=1";
 
-//         getDataFromHTML(body);
-//     }
-// );
 
-let dataForJson = request(
+
+request(
     {
-        uri: "https://apartamentosrd.com.do/propiedades?city=60&currency=RD&listing_type=1&page=1",
+        uri: url,
     },
     function (error, response, body) {
-        let dataJson = getDataFromHTML(JSON.parse(body));
-        return dataJson;
+        console.log(body);
+        try {
+            const stringedObj = JSON.stringify(body, null, 8);
+            fs.writeFileSync(pathToWriteHTML, stringedObj);
+        } catch (e) {
+            console.log("Error making string: ", e);
+        }
     }
 );
 
-console.log(dataForJson)
-
-
-// let dataForJson = getDataFromHTML(data);
+let dataForJson = getDataFromHTML(data);
 
 try {
     const stringedObj = JSON.stringify(dataForJson, null, 8);
