@@ -1,5 +1,6 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
+const { children } = require("cheerio/lib/api/traversing");
 
 let dataForJson = {}; //escribir aqui la data final
 const pathToWrite = __dirname + `/data.json`;
@@ -8,22 +9,12 @@ let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
 
 const getDataFromHTML = (html) => {
     let results = [];
-    const $ = cheerio.load(html);
-    $("span.comhead").each(function () {
-        let a = $(this).prev();
-        let title = a.text();
-        let url = a.attr("href");
-
-        let obj = {
-            title: title,
-            url: url,
-        };
-        results.push(obj);
-    });
-    if (results.length > 0) {
-        console.log(results);
-        return results;
-    }
+    const $ = cheerio.load(html, null, false);
+    $.html();
+    const propertyNames = $("h5", ".property-content").text();
+    const propertyLocations = $("span", ".sc-bBXqnf").text();
+    const propertyPrices = $("li", ".sc-fKFyDc").text();
+    return propertyPrices
 };
 
 console.log(getDataFromHTML(data));
