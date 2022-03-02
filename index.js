@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 var request = require("request");
 
 const pathToWrite = __dirname + `/properties.json`;
+// const pathToWrite = __dirname + `/datamook.json`;
 
 let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
 
