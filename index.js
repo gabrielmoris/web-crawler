@@ -11,10 +11,17 @@ const getDataFromHTML = (html) => {
     let results = [];
     const $ = cheerio.load(html, null, false);
     $.html();
-    const propertyNames = $("h5", ".property-content").text();
+    const propertyNames = $("h5", ".property-content")
+        .contents()
+        .map(function () {
+            return this.type === "text" ? $(this).text() : "";
+        })
+        .get()
+        .join("_");
     const propertyLocations = $("span", ".sc-bBXqnf").text();
     const propertyPrices = $("li", ".sc-fKFyDc").text();
-    return propertyPrices
+
+    const arrayOfPropertyNames = propertyNames.split("_");
 };
 
 console.log(getDataFromHTML(data));
