@@ -1,10 +1,8 @@
 const fs = require("fs");
 const cheerio = require("cheerio");
-const request = require("request");
 const pathToWrite = __dirname + `/propertiesWeb.json`;
-const pathToWriteHTML = __dirname + `/dataWeb.html`;
 
-let data = fs.readFileSync(`${__dirname}/dataWeb.html`, "utf8");
+let data = fs.readFileSync(`${__dirname}/webToCheck.html`, "utf8");
 
 const getDataFromHTML = (html) => {
     let result = [];
@@ -45,26 +43,12 @@ const getDataFromHTML = (html) => {
 };
 
 const url =
-    "https://apartamentosrd.com.do/propiedades?city=60&currency=RD&listing_type=1&page=1";
+    "https://apartamentosrd.com.do/propiedades?city=60&country=149&currency=RD&listing_type=1&page=1";
 
 
-
-request(
-    {
-        uri: url,
-    },
-    function (error, response, body) {
-        console.log(body);
-        try {
-            const stringedObj = JSON.stringify(body, null, 8);
-            fs.writeFileSync(pathToWriteHTML, stringedObj);
-        } catch (e) {
-            console.log("Error making string: ", e);
-        }
-    }
-);
 
 let dataForJson = getDataFromHTML(data);
+// console.log("DATAFORJSON ", dataForJson);
 
 try {
     const stringedObj = JSON.stringify(dataForJson, null, 8);
@@ -72,3 +56,5 @@ try {
 } catch (e) {
     console.log("Error making string: ", e);
 }
+
+module.exports.getDataFromHTML = getDataFromHTML;
